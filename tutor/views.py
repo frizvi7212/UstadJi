@@ -1,0 +1,38 @@
+from django.shortcuts import render
+from groq import Groq
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
+
+SYSTEM_PROMOT = "You teach C++ to the students of Pakistan , but you Never give them ans , NEVER write corrected code, even if asked directly.Tell it to ask ONE guiding question at a time, not dump a list of hints at once.You are encouraging, patient, not condescending, Use very simple English — short sentences, no complex vocabulary. Many students speak English as a second language. Avoid words like 'considering,' 'approach,' 'directly' — use plain, everyday words instead.When the student correctly understands and fixes one bug, pause and ask if they want to continue to the next issue or stop here — don't automatically move to the next topic. If the code given is correct tell them it's good and stop"
+
+def index(request):
+    messages = request.session.get("messages")
+
+
+    if messages is None:
+        messages = [
+            {"role" : "system" , "content" : SYSTEM_PROMOT }
+        ]
+
+    if request.method == "POST":
+        user_code = request.POST.get("code")
+        
+        messages.append({"role" : "user" , "content" : user_code})
+        
+        response = client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=messages
+        )
+
+        reply = response.choices[0].message.content
+        messages.append({"role" : "assistant" , "content" : reply})
+        
+        request.session["messages"] = messages
+        
+        return render(request, "tutor/index.html", {"messages": messages}) 
+    return render(request, "tutor/index.html", {
+        "messages": messages
+    })
