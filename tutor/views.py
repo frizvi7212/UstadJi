@@ -1,7 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render , redirect
 from groq import Groq
 from dotenv import load_dotenv
 import os
+from django.contrib.auth.forms import UserCreationForm 
+from tutor.form import UserForms
+
 
 load_dotenv()
 client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
@@ -21,13 +24,16 @@ def index(request):
         user_code = request.POST.get("code")
         
         messages.append({"role" : "user" , "content" : user_code})
-        
-        response = client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
-            messages=messages
-        )
+        try:
+            response = client.chat.completions.create(
+                model="llama-3.3-70b-versatile",
+                messages=messages
+            )
+            reply = response.choices[0].message.content
 
-        reply = response.choices[0].message.content
+        except Exception as e:
+            reply = "Ustadji is having trouble right now. Please try again in a moment."
+
         messages.append({"role" : "assistant" , "content" : reply})
         
         request.session["messages"] = messages
@@ -36,3 +42,13 @@ def index(request):
     return render(request, "tutor/index.html", {
         "messages": messages
     })
+
+def signup(request):
+    if request.method == "POST":
+        form = UserForms(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')
+    else:
+        form = UserForms()
+    return render(request, 'tutor/signup.html', {'form': form})
