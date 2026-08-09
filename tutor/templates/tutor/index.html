@@ -9,3 +9,8 @@
 {% endif %} {% if code.role == "assistant" %}
 <p>Ustadji: {{ code.content }}</p>
 {% endif %} {% endfor %}
+
+<form action="{% url 'logout' %}" method="post">
+  {% csrf_token %}
+  <button type="submit">logout</button>
+</form>

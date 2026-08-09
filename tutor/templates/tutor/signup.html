@@ -4,6 +4,8 @@
   <label>Email:</label>{{ form.email }} {{ form.email.errors }}
 
   <label>Password:</label> {{ form.password1 }} {{ form.password1.errors }}
-  <label>Confirm Password:</label> {{ form.password2 }} {{form.password2.error}}
+  <label>Confirm Password:</label> {{ form.password2 }}
+  {{form.password2.errors}}
   <button type="submit">Sign Up</button>
+  {{ form.non_field_errors }}
 </form>
