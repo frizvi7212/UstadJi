@@ -5,6 +5,7 @@ import os
 from django.contrib.auth.forms import UserCreationForm 
 from tutor.form import UserForms
 from django.contrib.auth.decorators import login_required
+from tutor.models import UserProfile
 
 load_dotenv()
 client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
@@ -48,7 +49,8 @@ def signup(request):
     if request.method == "POST":
         form = UserForms(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save()
+            UserProfile.objects.create(user = user)
             return redirect('login')
     else:
         form = UserForms()
