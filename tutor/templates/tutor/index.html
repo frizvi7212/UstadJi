@@ -1,4 +1,4 @@
-{% if not trial_ended %}
+{% extends 'tutor/base.html' %} {% block content %} {% if not trial_ended %}
 <form method="post">
   {% csrf_token %}
   <textarea name="code" placeholder="Paste your buggy code"></textarea>
@@ -21,3 +21,5 @@
   trying Ustadji.
 </p>
 {% endif %}
+<a href="{% url 'new_conversation' %}">New Conversation</a>
+{% endblock %}

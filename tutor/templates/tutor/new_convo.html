@@ -1,0 +1,11 @@
+{% extends 'tutor/base.html' %}{% block content %} {% if not trial_ended %}
+<form method="post">
+  {% csrf_token %}
+  <textarea name="code" placeholder="Paste your buggy code"></textarea>
+  <button type="submit">Ask Ustadji</button>
+</form>
+{% endif %} {% for code in messages %} {% if code.role == "user" %}
+<p>You: {{ code.content }}</p>
+{% endif %} {% if code.role == "assistant" %}
+<p>Ustadji: {{ code.content }}</p>
+{% endif %} {% endfor %} {% endblock %}

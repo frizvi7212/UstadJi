@@ -1,3 +1,4 @@
+{% extends 'tutor/base.html' %}{% block content %}
 <form method="post">
   {% csrf_token %}
   <label>Username:</label>{{ form.username }} {{ form.username.errors }}
@@ -6,3 +7,5 @@
   {{ form.non_field_errors }}
   <a href="{% url 'signup' %}">signup</a>
 </form>
+
+{% endblock %}

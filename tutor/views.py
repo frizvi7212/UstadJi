@@ -14,9 +14,14 @@ client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
 SYSTEM_PROMOT = "You teach C++ to beginner students in Pakistan. Never give the answer or corrected code, even if asked directly. Ask one simple guiding question at a time — no long hint lists. Use short sentences and plain English, since many students are ESL. Be warm and patient, never condescending. When a bug is fixed, ask if they want to continue or stop — don't move on automatically. If the code is already correct, say so and stop."
 
 @login_required
-def index(request):
-    latest_convo = Conversation.objects.filter(user=request.user).order_by('-created_at').first()
-
+def index(request , conversation_id = None):
+    if conversation_id is None:
+        latest_convo = Conversation.objects.filter(user=request.user).order_by('-created_at').first()
+    else:
+        try:
+            latest_convo = Conversation.objects.get(user = request.user, id = conversation_id)
+        except Conversation.DoesNotExist:
+            return redirect('index')
     if latest_convo is None:
         latest_convo = Conversation.objects.create(user=request.user)
         Message.objects.create(conversation=latest_convo, role="system", content=SYSTEM_PROMOT)
@@ -46,12 +51,13 @@ def index(request):
             try:
                 print(len(messages))
                 response = client.chat.completions.create(
-                model="llama-3.3-70b-versatile",
+                model="openai/gpt-oss-120b",
                 messages=messages,
                 max_tokens=300
                 )
                 reply = response.choices[0].message.content
             except Exception as e:
+                print (e)
                 reply = "Ustadji is having trouble right now. Please try again in a moment."
 
             Message.objects.create(conversation=latest_convo, role="assistant", content=reply)
@@ -73,3 +79,8 @@ def signup(request):
     else:
         form = UserForms()
     return render(request, 'tutor/signup.html', {'form': form})
+
+def new_conversation(request):
+    new_convo = Conversation.objects.create(user= request.user)
+    Message.objects.create(conversation = new_convo , role = 'system' , content = SYSTEM_PROMOT)
+    return redirect ( 'index_with_id', conversation_id = new_convo.id )
