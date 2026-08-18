@@ -1,19 +1,33 @@
 {% extends 'tutor/base.html' %} {% block content %} {% if not trial_ended %}
 <form method="post">
   {% csrf_token %}
-  <textarea name="code" placeholder="Paste your buggy code"></textarea>
+  <textarea
+    name="code"
+    id="code_submit"
+    placeholder="Paste your buggy code"
+  ></textarea>
   <button type="submit">Ask Ustadji</button>
 </form>
-{% endif %} {% for code in messages %} {% if code.role == "user" %}
+{% endif %} {% for code in messages reversed %} {% if code.role == "user" %}
 <p>You: {{ code.content }}</p>
 {% endif %} {% if code.role == "assistant" %}
 <p>Ustadji: {{ code.content }}</p>
 {% endif %} {% endfor %}
 
-<form action="{% url 'logout' %}" method="post">
-  {% csrf_token %}
-  <button type="submit">logout</button>
-</form>
+<div class="floating-actions">
+  <a
+    href="{% url 'new_conversation' %}"
+    class="icon-button new_convo"
+    title="New Conversation"
+    >+</a
+  >
+  <form action="{% url 'logout' %}" method="post" class="icon-form">
+    {% csrf_token %}
+    <button type="submit" class="icon-button logout-icon" title="Logout">
+      &#8674;
+    </button>
+  </form>
+</div>
 {% if trial_ended %}
 <p>
   <strong>Ustadji:</strong>Your free trial is over now. I liked helping you
@@ -21,5 +35,45 @@
   trying Ustadji.
 </p>
 {% endif %}
-<a href="{% url 'new_conversation' %}">New Conversation</a>
+<button
+  class="btn hamburger-btn"
+  type="button"
+  data-bs-toggle="offcanvas"
+  data-bs-target="#conversationSidebar"
+  aria-controls="conversationSidebar"
+>
+  &#9776;
+</button>
+
+<div
+  class="offcanvas offcanvas-start"
+  tabindex="-1"
+  id="conversationSidebar"
+  aria-labelledby="conversationSidebarLabel"
+>
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="conversationSidebarLabel">
+      Your Conversations
+    </h5>
+    <button
+      type="button"
+      class="btn-close btn-close-white"
+      data-bs-dismiss="offcanvas"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="offcanvas-body">
+    <a href="{% url 'new_conversation' %}" class="d-block mb-3"
+      >+ New Conversation</a
+    >
+    {% for convo, title in all_conversations %}
+    <a
+      href="{% url 'index_with_id' conversation_id=convo.id %}"
+      class="d-block mb-2"
+    >
+      {{ title }}
+    </a>
+    {% endfor %}
+  </div>
+</div>
 {% endblock %}

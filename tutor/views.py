@@ -29,10 +29,12 @@ def index(request , conversation_id = None):
     profile = UserProfile.objects.get(user= request.user)
     elapsed = timezone.now() - profile.trial_start
     trial_ended = elapsed >= timedelta(days=15) or profile.message_count >= 100
+    all_conversations = Conversation.objects.filter(user=request.user).order_by('-created_at')
+    conversation_list = [(convo, get_conversation_title(convo)) for convo in all_conversations]
     if request.method == "POST":
         if trial_ended:
              messages = Message.objects.filter(conversation=latest_convo)
-             return render(request, "tutor/index.html", {"messages": messages, "trial_ended": True})
+             return render(request, "tutor/index.html", {"messages": messages,"trial_ended": True,"all_conversations": conversation_list})
         else:
             user_code = request.POST.get("code")
             Message.objects.create(conversation=latest_convo, role="user", content=user_code)
@@ -63,10 +65,10 @@ def index(request , conversation_id = None):
             Message.objects.create(conversation=latest_convo, role="assistant", content=reply)
 
             messages = Message.objects.filter(conversation=latest_convo)
-            return render(request, "tutor/index.html", {"messages": messages})
+            return render(request, "tutor/index.html", {"messages": messages, "all_conversations": conversation_list})
     #exexutes when it's not a post request
     messages = Message.objects.filter(conversation=latest_convo)
-    return render(request, "tutor/index.html", {"messages": messages})
+    return render(request, "tutor/index.html", {"messages": messages, "all_conversations": conversation_list})
 
 
 def signup(request):
@@ -84,3 +86,9 @@ def new_conversation(request):
     new_convo = Conversation.objects.create(user= request.user)
     Message.objects.create(conversation = new_convo , role = 'system' , content = SYSTEM_PROMOT)
     return redirect ( 'index_with_id', conversation_id = new_convo.id )
+
+def get_conversation_title(convo):
+    first_message = Message.objects.filter(conversation=convo, role="user").order_by('timestamp').first()
+    if first_message:
+        return first_message.content[:40]
+    return "New Conversation"
