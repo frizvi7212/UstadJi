@@ -18,6 +18,7 @@
         max-width: 700px;
         margin-left: auto;
         margin-right: auto;
+        padding-bottom: 80px;
       }
 
       textarea {
@@ -50,12 +51,13 @@
         line-height: 1.5;
       }
       .topbar {
+        position: fixed;
+        top: 16px;
+        left: 25px;
         display: flex;
         align-items: center;
-        gap: 12px;
-        padding-bottom: 12px;
-        margin-bottom: 16px;
-        border-bottom: 1px solid #333;
+        gap: 8px;
+        z-index: 100;
       }
 
       .hamburger {
@@ -65,7 +67,9 @@
 
       .topbar-title {
         font-weight: 500;
-        font-size: 16px;
+        font-size: 20px;
+        color: #b15b7a;
+        padding-top: 13px;
       }
       .action-bar {
         display: flex;
@@ -114,10 +118,86 @@
         border-radius: 10px;
         background-color: #3a3a3a;
       }
+      .hamburger-btn {
+        background: transparent;
+        border: none;
+        color: #ffffff;
+        font-size: 22px;
+        padding: 0;
+        cursor: pointer;
+      }
+      .input-bar {
+        position: fixed;
+        bottom: 0;
+        left: 18.75rem;
+        right: 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 16px;
+        background-color: #1a1a1a;
+        border-top: 1px solid #333;
+        width: 60%;
+        border-radius: 0.938rem;
+      }
+
+      .input-bar textarea {
+        flex: 1;
+        resize: none;
+        max-height: 120px;
+      }
+
+      .send-icon-btn {
+        background: transparent;
+        border: none;
+        color: #b15b7a;
+        font-size: 20px;
+        cursor: pointer;
+        padding: 8px;
+      }
+      .offcanvas a {
+        color: #e8e8e8;
+      }
+      .user-message {
+        background-color: #1a1a1a;
+        margin-left: auto;
+        text-align: right;
+        padding: 10px;
+      }
+
+      .assistant-message {
+        background-color: #b15b7a;
+        padding: 10px;
+        margin-right: auto;
+        text-align: left;
+        border-radius: 10px;
+        justify-content: left;
+      }
+      @media (max-width: 600px) {
+        .input-bar {
+          left: 0;
+          width: 100%;
+          border-radius: 0;
+        }
+      }
+      @media (max-width: 400px) {
+        .topbar-title {
+          font-size: 16px;
+        }
+      }
     </style>
   </head>
   <body>
     <div class="topbar">
+      <button
+        class="btn hamburger-btn"
+        type="button"
+        data-bs-toggle="offcanvas"
+        data-bs-target="#conversationSidebar"
+        aria-controls="conversationSidebar"
+      >
+        &#9776;
+      </button>
       <span class="topbar-title">Ustadji</span>
     </div>
     {% block content %}

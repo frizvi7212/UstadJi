@@ -11,3 +11,5 @@ P.S: starting this before building accounts , auth , and ui
 12.8.26: learned about dbs models, admin accout, makemigrations and migrate
 14.8.26: learned about fetching and putting data in dbs e.g(through ojects, create, filter etc)
 15.8.26: learned about triming (had 2 errors) , sending only 20 messages to LLM
+18.8.26: learned about adding styling and adding bootstrap to the page conecting conversations and making chat's title
+19.8.26: learned about styling like adding classes to the html page

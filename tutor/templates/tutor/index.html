@@ -1,79 +1,75 @@
 {% extends 'tutor/base.html' %} {% block content %} {% if not trial_ended %}
-<form method="post">
+<form method="post" class="input-bar">
   {% csrf_token %}
   <textarea
     name="code"
     id="code_submit"
     placeholder="Paste your buggy code"
+    rows="1"
   ></textarea>
-  <button type="submit">Ask Ustadji</button>
+  <button type="submit" class="send-icon-btn" title="Send">&#8593;</button>
 </form>
-{% endif %} {% for code in messages reversed %} {% if code.role == "user" %}
-<p>You: {{ code.content }}</p>
-{% endif %} {% if code.role == "assistant" %}
-<p>Ustadji: {{ code.content }}</p>
-{% endif %} {% endfor %}
+{% endif %} {% for code in messages %} {% if code.role == "user" %}
+<div class="message user-message">
+  {{ code.content }}
+  <div />
+  {% endif %} {% if code.role == "assistant" %}
+  <div class="message assistant-message">{{ code.content }}</div>
+  {% endif %} {% endfor %}
 
-<div class="floating-actions">
-  <a
-    href="{% url 'new_conversation' %}"
-    class="icon-button new_convo"
-    title="New Conversation"
-    >+</a
-  >
-  <form action="{% url 'logout' %}" method="post" class="icon-form">
-    {% csrf_token %}
-    <button type="submit" class="icon-button logout-icon" title="Logout">
-      &#8674;
-    </button>
-  </form>
-</div>
-{% if trial_ended %}
-<p>
-  <strong>Ustadji:</strong>Your free trial is over now. I liked helping you
-  learn. If you want more help, you can subscribe to keep going. Thank you for
-  trying Ustadji.
-</p>
-{% endif %}
-<button
-  class="btn hamburger-btn"
-  type="button"
-  data-bs-toggle="offcanvas"
-  data-bs-target="#conversationSidebar"
-  aria-controls="conversationSidebar"
->
-  &#9776;
-</button>
-
-<div
-  class="offcanvas offcanvas-start"
-  tabindex="-1"
-  id="conversationSidebar"
-  aria-labelledby="conversationSidebarLabel"
->
-  <div class="offcanvas-header">
-    <h5 class="offcanvas-title" id="conversationSidebarLabel">
-      Your Conversations
-    </h5>
-    <button
-      type="button"
-      class="btn-close btn-close-white"
-      data-bs-dismiss="offcanvas"
-      aria-label="Close"
-    ></button>
-  </div>
-  <div class="offcanvas-body">
-    <a href="{% url 'new_conversation' %}" class="d-block mb-3"
-      >+ New Conversation</a
-    >
-    {% for convo, title in all_conversations %}
+  <div class="floating-actions">
     <a
-      href="{% url 'index_with_id' conversation_id=convo.id %}"
-      class="d-block mb-2"
+      href="{% url 'new_conversation' %}"
+      class="icon-button new_convo"
+      title="New Conversation"
+      >+</a
     >
-      {{ title }}
-    </a>
-    {% endfor %}
+    <form action="{% url 'logout' %}" method="post" class="icon-form">
+      {% csrf_token %}
+      <button type="submit" class="icon-button logout-icon" title="Logout">
+        &#8674;
+      </button>
+    </form>
   </div>
+  {% if trial_ended %}
+  <p>
+    <strong>Ustadji:</strong>Your free trial is over now. I liked helping you
+    learn. If you want more help, you can subscribe to keep going. Thank you for
+    trying Ustadji.
+  </p>
+  {% endif %}
+
+  <div
+    class="offcanvas offcanvas-start text-bg-dark"
+    tabindex="-1"
+    id="conversationSidebar"
+    aria-labelledby="conversationSidebarLabel"
+  >
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="conversationSidebarLabel">
+        Your Conversations
+      </h5>
+      <button
+        type="button"
+        class="btn-close btn-close-white"
+        data-bs-dismiss="offcanvas"
+        aria-label="Close"
+      ></button>
+    </div>
+    <div class="offcanvas-body">
+      <a href="{% url 'new_conversation' %}" class="d-block mb-3"
+        >+ New Conversation</a
+      >
+      {% for convo, title in all_conversations %}
+      <a
+        href="{% url 'index_with_id' conversation_id=convo.id %}"
+        class="d-block mb-2"
+      >
+        {{ title }}
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+
+  {% endblock %}
 </div>
-{% endblock %}
