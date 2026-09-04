@@ -9,13 +9,20 @@
   ></textarea>
   <button type="submit" class="send-icon-btn" title="Send">&#8593;</button>
 </form>
-{% endif %} {% for code in messages %} {% if code.role == "user" %}
-<div class="message user-message">
-  {{ code.content }}
-  <div />
-  {% endif %} {% if code.role == "assistant" %}
-  <div class="message assistant-message">{{ code.content }}</div>
-  {% endif %} {% endfor %}
+{% endif %}{% for code in messages %}
+  {% if code.role == "user" %}
+    <div class="message-row" style="align-items: flex-end;">
+      <span class="message-label">You</span>
+      <div class="user-message">{{ code.content }}</div>
+    </div>
+  {% endif %}
+  {% if code.role == "assistant" %}
+    <div class="message-row" style="align-items: flex-start;">
+      <span class="message-label">Ustadji</span>
+      <div class="assistant-message">{{ code.content }}</div>
+    </div>
+  {% endif %}
+{% endfor %}
 
   <div class="floating-actions">
     <a

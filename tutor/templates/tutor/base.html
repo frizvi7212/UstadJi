@@ -15,6 +15,7 @@
         font-family: system-ui, sans-serif;
         margin: 0;
         padding: 16px;
+        padding-top: 72px; /* clears the fixed topbar */
         max-width: 700px;
         margin-left: auto;
         margin-right: auto;
@@ -129,15 +130,16 @@
       .input-bar {
         position: fixed;
         bottom: 0;
-        left: 18.75rem;
+        left: 0;
         right: 0;
+        margin: 0 auto;
+        max-width: 700px;
         display: flex;
         align-items: center;
         gap: 8px;
         padding: 12px 16px;
         background-color: #1a1a1a;
         border-top: 1px solid #333;
-        width: 60%;
         border-radius: 0.938rem;
       }
 
@@ -158,21 +160,118 @@
       .offcanvas a {
         color: #e8e8e8;
       }
+      .message-row {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 14px;
+      }
+
+      .message-label {
+        font-size: 12px;
+        color: #999;
+        margin-bottom: 4px;
+      }
+
       .user-message {
-        background-color: #1a1a1a;
-        margin-left: auto;
-        text-align: right;
-        padding: 10px;
+        align-self: flex-end;
+        background-color: #2a2a2a;
+        color: #e8e8e8;
+        padding: 10px 14px;
+        border-radius: 14px 14px 4px 14px;
       }
 
       .assistant-message {
+        align-self: flex-start;
         background-color: #b15b7a;
-        padding: 10px;
-        margin-right: auto;
-        text-align: left;
-        border-radius: 10px;
-        justify-content: left;
+        color: #fff;
+        padding: 10px 14px;
+        border-radius: 14px 14px 14px 4px;
+        line-height: 1.6;
       }
+
+      .user-message,
+      .assistant-message {
+        max-width: 78%;
+        width: fit-content;
+      }
+      /* Signup Page Styling */
+      .signup-container {
+        max-width: 400px;
+        margin: 40px auto;
+        background-color: #2a2a2a;
+        padding: 24px;
+        border: 1px solid #444;
+        border-radius: 12px;
+      }
+
+      .signup-container h2 {
+        color: #b15b7a;
+        margin-bottom: 20px;
+        font-size: 24px;
+        text-align: center;
+      }
+
+      .signup-form .form-group {
+        margin-bottom: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .signup-form label {
+        font-size: 14px;
+        color: #ccc;
+      }
+
+      .signup-form input {
+        background-color: #1a1a1a;
+        color: #e8e8e8;
+        border: 1px solid #444;
+        border-radius: 8px;
+        padding: 10px;
+        font-size: 15px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      .signup-form input:focus {
+        border-color: #b15b7a;
+        outline: none;
+      }
+
+      /* Pink Sign Up Button matching your theme color (#b15b7a) */
+      .signup-btn {
+        background-color: #b15b7a;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: 10px 16px;
+        width: 100%;
+        font-size: 16px;
+        font-weight: 500;
+        margin-top: 12px;
+        cursor: pointer;
+      }
+
+      .signup-btn:hover {
+        background-color: #a04f6a;
+      }
+
+      .login-link-wrap {
+        text-align: center;
+        margin-top: 16px;
+        font-size: 14px;
+      }
+
+      .login-link-wrap a {
+        color: #b15b7a;
+        text-decoration: none;
+      }
+
+      .login-link-wrap a:hover {
+        text-decoration: underline;
+      }
+
       @media (max-width: 600px) {
         .input-bar {
           left: 0;

@@ -1,11 +1,45 @@
-{% extends 'tutor/base.html' %}{% block content %}
-<form method="post">
-  {% csrf_token %}
-  <label>Username:</label>{{ form.username }} {{ form.username.errors }}
-  <label>Password:</label>{{ form.password }} {{ form.password.errors }}
-  <button type="submit">Login</button>
-  {{ form.non_field_errors }}
-  <a href="{% url 'signup' %}">signup</a>
-</form>
+{% extends 'tutor/base.html' %}
+{% block content %}
+
+<div class="signup-container">
+  <h2>Login to Ustadji</h2>
+  
+  <form method="post" class="signup-form">
+    {% csrf_token %}
+    
+    <!-- Username Field -->
+    <div class="form-group">
+      <label for="id_username">Username:</label>
+      {{ form.username }}
+      {% if form.username.errors %}
+        <span class="text-danger small">{{ form.username.errors }}</span>
+      {% endif %}
+    </div>
+
+    <!-- Password Field -->
+    <div class="form-group">
+      <label for="id_password">Password:</label>
+      {{ form.password }}
+      {% if form.password.errors %}
+        <span class="text-danger small">{{ form.password.errors }}</span>
+      {% endif %}
+    </div>
+
+    <!-- Non-Field Errors (e.g., incorrect credentials) -->
+    {% if form.non_field_errors %}
+      <div class="text-danger small text-center mb-2">
+        {{ form.non_field_errors }}
+      </div>
+    {% endif %}
+
+    <!-- Submit Button -->
+    <button type="submit" class="signup-btn">Login</button>
+    
+    <!-- Link to Signup Page -->
+    <div class="login-link-wrap">
+      Don't have an account? <a href="{% url 'signup' %}">Sign Up</a>
+    </div>
+  </form>
+</div>
 
 {% endblock %}
